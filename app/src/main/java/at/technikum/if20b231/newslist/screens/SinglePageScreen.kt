@@ -2,6 +2,8 @@ package at.technikum.if20b231.newslist.screens
 
 import android.content.Intent
 import android.net.Uri
+import android.text.Html
+import android.widget.TextView
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -27,11 +29,14 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
+import androidx.core.text.HtmlCompat
 import androidx.navigation.NavController
 import at.technikum.if20b231.newslist.R
+import at.technikum.if20b231.newslist.handler.HtmlText
 import at.technikum.if20b231.newslist.modle.Page
 import com.skydoves.landscapist.CircularReveal
 import com.skydoves.landscapist.glide.GlideImage
+
 
 
 @Composable
@@ -92,25 +97,8 @@ fun SinglePageScreen(page: Page) {
 
             // HTML
             page.descriptor?.let {
-
-                Text(
-                    text = "Description:",
-                    color = Color.Black,
-                    fontSize = 14.sp,
-                    textDecoration = TextDecoration.Underline,
-                    fontWeight = FontWeight.Bold
-                )
+                HtmlText(text = "$it")
             }
-            page.descriptor?.let {
-                Text(
-                    text = "$it",
-                    color = Color.Black,
-                    fontSize = 8.sp,
-                    fontWeight = FontWeight.Normal
-                )
-            }
-
-
             //Full Story
             Button(
                 modifier = Modifier

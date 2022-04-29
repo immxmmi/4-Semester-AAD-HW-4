@@ -65,9 +65,6 @@ class NewsListViewModel : ViewModel() {
          loadPages(pages)
     }
 
-
-
-
 }
 
 
