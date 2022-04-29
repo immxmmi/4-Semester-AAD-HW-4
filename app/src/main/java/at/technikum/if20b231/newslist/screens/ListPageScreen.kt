@@ -9,6 +9,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Error
+import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -32,7 +34,7 @@ import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
 fun PageItem(page: Page, navController: NavController) {
-    var imageUrl by remember {mutableStateOf(page.imageURL)}
+    var imageUrl by remember { mutableStateOf(page.imageURL) }
 
 
     val context = LocalContext.current
@@ -46,8 +48,15 @@ fun PageItem(page: Page, navController: NavController) {
         horizontalArrangement = Arrangement.spacedBy(12.dp),
 
         ) {
-
-
+        // IMG
+        GlideImage(
+            imageModel = imageUrl,
+            contentScale = ContentScale.Fit,
+            circularReveal = CircularReveal(250),
+            modifier = Modifier.size(80.dp),
+            placeHolder = Icons.Filled.Image,
+            error = Icons.Filled.Error
+        )
         Text(
             modifier = Modifier.clickable(enabled = true) {
                 if (page == null) {
@@ -72,11 +81,7 @@ fun PageItem(page: Page, navController: NavController) {
             fontWeight = FontWeight.Bold,
             fontSize = 12.sp
         )
-        GlideImage(imageModel = imageUrl,
-        contentScale = ContentScale.Fit,
-            circularReveal = CircularReveal(250),
-            modifier = Modifier.size(80.dp)
-            )
+
     }
 }
 
@@ -86,7 +91,7 @@ fun ShowListOfPages(navController: NavController, model: NewsListViewModel) {
     val data by model.load.observeAsState()
     var page = data ?: emptyList()
     val context = LocalContext.current
-    var expanded by remember { mutableStateOf( false ) }
+    var expanded by remember { mutableStateOf(false) }
     NewsListTheme {
         Surface(color = MaterialTheme.colors.background) {
             Column {

@@ -1,26 +1,43 @@
 package at.technikum.if20b231.newslist.screens
 
+import android.content.Intent
+import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
-import androidx.compose.runtime.Composable
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Error
+import androidx.compose.material.icons.filled.Image
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import at.technikum.if20b231.newslist.R
 import at.technikum.if20b231.newslist.modle.Page
+import com.skydoves.landscapist.CircularReveal
+import com.skydoves.landscapist.glide.GlideImage
 
 
 @Composable
 fun SinglePageScreen(page: Page) {
+    var imageUrl by remember { mutableStateOf(page.imageURL) }
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
@@ -33,70 +50,27 @@ fun SinglePageScreen(page: Page) {
                 .background(Color.White)
                 .fillMaxSize(),
         ) {
-            page.pubDate?.let {
-                Text(
-                    text = "Publication date: ",
-                    color = Color.Black,
-                    fontSize = 14.sp,
-                    textDecoration = TextDecoration.Underline,
-                    fontWeight = FontWeight.Bold
-                )
-            }
+            // IMG
+            GlideImage(
+                imageModel = imageUrl,
+                contentScale = ContentScale.Fit,
+                circularReveal = CircularReveal(400),
+                modifier = Modifier.size(100.dp),
+                placeHolder = Icons.Filled.Image,
+                error = Icons.Filled.Error
+            )
 
-            page.pubDate?.let {
-                Text(
-                    text = "$it",
-                    color = Color.Black,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Normal
-                )
-            }
 
-            page.id?.let {
-                Text(
-                    text = "Unique identifier:",
-                    color = Color.Black,
-                    fontSize = 14.sp,
-                    textDecoration = TextDecoration.Underline,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-            page.id?.let {
-                Text(
-                    text = "$it",
-                    color = Color.Black,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Normal
-                )
-            }
-            page.title?.let {
-                Text(
-                    text = "Title:",
-                    color = Color.Black,
-                    fontSize = 14.sp,
-                    textDecoration = TextDecoration.Underline,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-
+            // Box
             page.title?.let {
                 Text(
                     text = "$it",
                     color = Color.Black,
-                    fontSize = 14.sp,
+                    fontSize = 20.sp,
                     fontWeight = FontWeight.Normal
                 )
             }
 
-            page.author?.let {
-                Text(
-                    text = "Author:",
-                    color = Color.Black,
-                    fontSize = 14.sp,
-                    textDecoration = TextDecoration.Underline,
-                    fontWeight = FontWeight.Bold
-                )
-            }
             page.author?.let {
                 Text(
                     text = "$it",
@@ -106,6 +80,17 @@ fun SinglePageScreen(page: Page) {
                 )
             }
 
+            page.pubDate?.let {
+                Text(
+                    text = "$it",
+                    color = Color.Black,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Normal
+                )
+            }
+
+
+            // HTML
             page.descriptor?.let {
 
                 Text(
@@ -125,44 +110,15 @@ fun SinglePageScreen(page: Page) {
                 )
             }
 
-            page.imageURL?.let {
-                Text(
-                    text = "Image URL:",
-                    color = Color.Black,
-                    fontSize = 14.sp,
-                    textDecoration = TextDecoration.Underline,
-                    fontWeight = FontWeight.Bold
-                )
-            }
 
-            page.imageURL?.let {
-                Text(
-                    text = "$it",
-                    color = Color.Blue,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Normal,
-                    textDecoration = TextDecoration.Underline
-                )
-            }
-
-            page.articleURL?.let {
-                Text(
-                    text = "Full article link:",
-                    color = Color.Black,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
-                            textDecoration = TextDecoration.Underline
-                )
-            }
-
-            page.articleURL?.let {
-                Text(
-                    text = "$it",
-                    color = Color.Blue,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Normal,
-                    textDecoration = TextDecoration.Underline
-                )
+            //Full Story
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                onClick = {
+                    Toast.makeText(context, "No Details", Toast.LENGTH_SHORT).show()
+                }) {
+                Text(text = "Full Story")
             }
         }
     }
@@ -172,3 +128,5 @@ fun SinglePageScreen(page: Page) {
 fun ShowSinglePage(navController: NavController, page: Page) {
     SinglePageScreen(page)
 }
+
+
