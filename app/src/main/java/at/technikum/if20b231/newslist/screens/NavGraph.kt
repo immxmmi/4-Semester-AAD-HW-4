@@ -23,7 +23,11 @@ fun SetupNavGraph(navController: NavHostController, viewModel: NewsListViewModel
 
         // List of Pages
         composable(route = Screen.ListPage.route) {
-            ShowListOfPages(navController = navController, viewModel)
+            ShowListOfPages(navController = navController,model = viewModel)
+        }
+
+        composable(route = Screen.Settings.route){
+            SettingsScreen(navController = navController, model = viewModel)
         }
 
         // Single Page

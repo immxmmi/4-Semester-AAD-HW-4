@@ -8,8 +8,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -73,32 +74,37 @@ fun ShowListOfPages(navController: NavController, model: NewsListViewModel) {
     val data by model.load.observeAsState()
     var page = data ?: emptyList()
     val context = LocalContext.current
+    var expanded by remember { mutableStateOf( false ) }
     NewsListTheme {
         Surface(color = MaterialTheme.colors.background) {
             Column {
 
                 TopAppBar(
-                    title = { Text(stringResource(R.string.app_title)) })
-                Button(
-                    modifier = Modifier
-                        .background(Color.White)
-                        .fillMaxWidth()
-                        .border(0.02.dp, color = Color.Black)
-                        .padding(8.dp),
-
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF2D7637)),
-                    onClick = {
-                       model.reload()
+                    title = { Text(stringResource(R.string.app_title)) },
+                    actions = {
+                        IconButton(onClick = {
+                            expanded = true
+                        }) {
+                            Icon(Icons.Filled.MoreVert, contentDescription = "menu")
+                            DropdownMenu(expanded = expanded,
+                                onDismissRequest = { expanded = false }) {
+                                DropdownMenuItem(onClick = {
+                                    navController.navigate(Screen.Settings.route)
+                                    expanded = false
+                                }) {
+                                    Text(stringResource(R.string.Menu_1))
+                                }
+                                DropdownMenuItem(onClick = {
+                                    model.reload()
+                                    expanded = false
+                                }) {
+                                    Text(stringResource(R.string.Menu_2))
+                                }
+                            }
+                        }
                     }
 
-                ) {
-                    Text(
-                        color = Color.White,
-                        fontFamily= FontFamily.Monospace,
-                        text = stringResource(R.string.reload)
-                    )
-
-                }
+                )
                 LazyColumn {
                     items(items = page) { page ->
                         PageItem(page = page, navController)

@@ -17,6 +17,12 @@ import java.net.URL
 
 class NewsListViewModel : ViewModel() {
 
+
+    val text = MutableLiveData("---")
+
+
+
+
     private val pages : MutableLiveData<List<Page>> by lazy {
         MutableLiveData<List<Page>>().also {
             loadPages(it)
@@ -58,6 +64,13 @@ class NewsListViewModel : ViewModel() {
     }
 
 }
+
+
+
+
+
+
+
 
 @Throws(XmlPullParserException::class, IOException::class)
 private fun loadXmlFromNetwork(urlString: String): List<Page> {
