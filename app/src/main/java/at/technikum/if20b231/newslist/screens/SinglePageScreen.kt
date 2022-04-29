@@ -1,18 +1,12 @@
 package at.technikum.if20b231.newslist.screens
 
-import android.content.Intent
-import android.net.Uri
-import android.text.Html
-import android.widget.TextView
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
@@ -25,18 +19,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat.startActivity
-import androidx.core.text.HtmlCompat
 import androidx.navigation.NavController
 import at.technikum.if20b231.newslist.R
 import at.technikum.if20b231.newslist.handler.HtmlText
 import at.technikum.if20b231.newslist.modle.Page
 import com.skydoves.landscapist.CircularReveal
 import com.skydoves.landscapist.glide.GlideImage
-
 
 
 @Composable
@@ -47,58 +37,63 @@ fun SinglePageScreen(page: Page) {
         modifier = Modifier
             .verticalScroll(rememberScrollState())
     ) {
-        TopAppBar(
-            title = { Text(stringResource(R.string.pageTitle)) })
+        TopAppBar(title = { Text(stringResource(R.string.pageTitle)) })
 
-        Column(
-            modifier = Modifier
-                .background(Color.White)
-                .fillMaxSize(),
-        ) {
-            // IMG
-            GlideImage(
-                imageModel = imageUrl,
-                contentScale = ContentScale.Fit,
-                circularReveal = CircularReveal(400),
-                modifier = Modifier.size(100.dp),
-                placeHolder = Icons.Filled.Image,
-                error = Icons.Filled.Error
-            )
-
-
-            // Box
-            page.title?.let {
-                Text(
-                    text = "$it",
-                    color = Color.Black,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Normal
+       // Scaffold(topBar = {
+            Column(
+                modifier = Modifier
+                    .background(Color.White)
+                    .fillMaxSize(),
+            ) {
+                // IMG
+                // IMG
+                GlideImage(
+                    imageModel = "https://media-mbst-pub-ue1.s3.amazonaws.com/creatr-uploaded-images/2020-09/1fa32ec0-f76f-11ea-9d69-07d789e1644d",
+                    contentScale = ContentScale.Fit,
+                    circularReveal = CircularReveal(250),
+                    modifier = Modifier.size(500.dp),
+                    placeHolder = Icons.Filled.Image,
+                    error = Icons.Filled.Error
                 )
-            }
+                // Box
+                Column(
+                    Modifier.padding(0.dp, 0.dp, 0.dp, 0.dp)
+                ) {
+                    page.title?.let {
+                        Text(
+                            text = "$it",
+                            color = Color.DarkGray,
+                            fontSize = 30.sp,
+                            fontWeight = FontWeight.Normal
+                        )
+                    }
 
-            page.author?.let {
-                Text(
-                    text = "$it",
-                    color = Color.Black,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Normal
-                )
-            }
+                    page.author?.let {
+                        Text(
+                            text = "$it",
+                            color = Color.Gray,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Normal
+                        )
+                    }
 
-            page.pubDate?.let {
-                Text(
-                    text = "$it",
-                    color = Color.Black,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Normal
-                )
+                    page.pubDate?.let {
+                        Text(
+                            text = "$it",
+                            color = Color.Gray,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Normal
+                        )
+                    }
+                }
             }
-
+      //  }, content = {
 
             // HTML
             page.descriptor?.let {
                 HtmlText(text = "$it")
             }
+
             //Full Story
             Button(
                 modifier = Modifier
@@ -108,7 +103,8 @@ fun SinglePageScreen(page: Page) {
                 }) {
                 Text(text = "Full Story")
             }
-        }
+     //   }
+     //   )
     }
 }
 
