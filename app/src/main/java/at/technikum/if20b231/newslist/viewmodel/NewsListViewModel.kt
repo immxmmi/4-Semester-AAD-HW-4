@@ -1,5 +1,6 @@
 package at.technikum.if20b231.newslist.viewmodel
 
+import androidx.compose.runtime.MutableState
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,10 +18,9 @@ import java.net.URL
 
 class NewsListViewModel : ViewModel() {
 
-
-    val text = MutableLiveData("---")
-
-
+    val imageShow : MutableLiveData<Boolean> = MutableLiveData(true)
+    val imageDownload : MutableLiveData<Boolean> = MutableLiveData(true)
+    val url = "https://www.engadget.com/rss.xml"
 
 
     private val pages : MutableLiveData<List<Page>> by lazy {
@@ -28,6 +28,7 @@ class NewsListViewModel : ViewModel() {
             loadPages(it)
         }
     }
+
     val load:LiveData<List<Page>>
         get() = pages
 
@@ -54,14 +55,18 @@ class NewsListViewModel : ViewModel() {
 
     //LOAD RESULT
     private suspend fun loadWebResult(): List<Page>  {
-        val url = "https://www.engadget.com/rss.xml"
         return withContext(Dispatchers.IO) { loadXmlFromNetwork(url) }
     }
+    //Update Settings
+
 
     //RELOAD RESULT
      fun reload(){
          loadPages(pages)
     }
+
+
+
 
 }
 

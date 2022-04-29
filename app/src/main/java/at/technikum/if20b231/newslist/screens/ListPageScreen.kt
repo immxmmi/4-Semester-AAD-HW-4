@@ -94,40 +94,42 @@ fun ShowListOfPages(navController: NavController, model: NewsListViewModel) {
     var expanded by remember { mutableStateOf(false) }
     NewsListTheme {
         Surface(color = MaterialTheme.colors.background) {
-            Column {
-
-                TopAppBar(
-                    title = { Text(stringResource(R.string.app_title)) },
-                    actions = {
-                        IconButton(onClick = {
-                            expanded = true
-                        }) {
-                            Icon(Icons.Filled.MoreVert, contentDescription = "menu")
-                            DropdownMenu(expanded = expanded,
-                                onDismissRequest = { expanded = false }) {
-                                DropdownMenuItem(onClick = {
-                                    navController.navigate(Screen.Settings.route)
-                                    expanded = false
-                                }) {
-                                    Text(stringResource(R.string.Menu_1))
-                                }
-                                DropdownMenuItem(onClick = {
-                                    model.reload()
-                                    expanded = false
-                                }) {
-                                    Text(stringResource(R.string.Menu_2))
+            Scaffold(
+                topBar = {
+                    TopAppBar(
+                        title = { Text(stringResource(R.string.app_title)) },
+                        actions = {
+                            IconButton(onClick = {
+                                expanded = true
+                            }) {
+                                Icon(Icons.Filled.MoreVert, contentDescription = "menu")
+                                DropdownMenu(expanded = expanded,
+                                    onDismissRequest = { expanded = false }) {
+                                    DropdownMenuItem(onClick = {
+                                        navController.navigate(Screen.Settings.route)
+                                        expanded = false
+                                    }) {
+                                        Text(stringResource(R.string.Menu_1))
+                                    }
+                                    DropdownMenuItem(onClick = {
+                                        model.reload()
+                                        expanded = false
+                                    }) {
+                                        Text(stringResource(R.string.Menu_2))
+                                    }
                                 }
                             }
                         }
-                    }
 
-                )
-                LazyColumn {
-                    items(items = page) { page ->
-                        PageItem(page = page, navController)
+                    )
+                }, content = {
+                    LazyColumn {
+                        items(items = page) { page ->
+                            PageItem(page = page, navController)
+                        }
                     }
                 }
-            }
+            )
         }
     }
 }
