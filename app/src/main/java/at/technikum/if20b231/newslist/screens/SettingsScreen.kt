@@ -5,9 +5,11 @@ import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TopAppBar
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
@@ -32,16 +34,9 @@ fun SettingsScreen(navController : NavController, model : NewsListViewModel) {
 
     Column {
         TopAppBar(title = { stringResource(R.string.setings_menu_title) })
-        TextField(
-            value = newText ?: "",
-            onValueChange = {
-                newText = it
-            },
-            label = { Text("Text") },
-            textStyle = TextStyle(fontSize = 21.sp),
-            modifier = Modifier
-                .padding(8.dp)
-                .fillMaxWidth())
+                LazyColumn {
+
+                }
     }
 }
 

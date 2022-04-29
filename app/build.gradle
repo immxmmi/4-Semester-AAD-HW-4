@@ -71,6 +71,10 @@ dependencies {
     implementation 'androidx.activity:activity-ktx:1.4.0'
     implementation 'androidx.datastore:datastore-preferences:1.0.0'
 
+    //IMG
+    implementation 'com.github.skydoves:landscapist-glide:1.5.1'
+    implementation 'androidx.compose.material:material-icons-extended:1.1.1'
+
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

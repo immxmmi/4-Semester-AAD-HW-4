@@ -15,6 +15,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
@@ -26,9 +27,14 @@ import at.technikum.if20b231.newslist.R
 import at.technikum.if20b231.newslist.modle.Page
 import at.technikum.if20b231.newslist.ui.theme.NewsListTheme
 import at.technikum.if20b231.newslist.viewmodel.NewsListViewModel
+import com.skydoves.landscapist.CircularReveal
+import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
 fun PageItem(page: Page, navController: NavController) {
+    var imageUrl by remember {mutableStateOf(page.imageURL)}
+
+
     val context = LocalContext.current
     Row(
         modifier = Modifier
@@ -40,6 +46,7 @@ fun PageItem(page: Page, navController: NavController) {
         horizontalArrangement = Arrangement.spacedBy(12.dp),
 
         ) {
+
 
         Text(
             modifier = Modifier.clickable(enabled = true) {
@@ -65,6 +72,11 @@ fun PageItem(page: Page, navController: NavController) {
             fontWeight = FontWeight.Bold,
             fontSize = 12.sp
         )
+        GlideImage(imageModel = imageUrl,
+        contentScale = ContentScale.Fit,
+            circularReveal = CircularReveal(250),
+            modifier = Modifier.size(80.dp)
+            )
     }
 }
 
