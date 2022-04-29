@@ -43,7 +43,25 @@ fun PageItem(page: Page, navController: NavController) {
             .background(Color.White)
             .fillMaxWidth()
             .border(0.02.dp, color = Color.Black)
-            .padding(24.dp),
+            .padding(24.dp)
+            .clickable(enabled = true) {
+        if (page == null) {
+            Toast.makeText(context, "No Details", Toast.LENGTH_SHORT).show()
+        } else {
+
+            navController.navigate(
+                route = Screen.PageDetail.withArgs(
+                    page.id.orEmpty(),
+                    page.title.orEmpty(),
+                    page.author.orEmpty(),
+                    page.descriptor.orEmpty().replace("/", "\\"),
+                    page.pubDate.toString(),
+                    page.imageURL.orEmpty().replace("/", "\\"),
+                    page.articleURL.toString().replace("/", "\\")
+                )
+            )
+        }
+    },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
 
@@ -54,6 +72,56 @@ fun PageItem(page: Page, navController: NavController) {
             contentScale = ContentScale.Fit,
             circularReveal = CircularReveal(250),
             modifier = Modifier.size(80.dp),
+            placeHolder = Icons.Filled.Image,
+            error = Icons.Filled.Error
+        )
+        Column() {
+
+        Text(
+            text = "${page.title}",
+            color = Color.DarkGray,
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp
+        )
+            Text(
+                text = "${page.author}",
+                color = Color.Gray,
+                fontWeight = FontWeight.Bold,
+                fontSize = 8.sp
+            )
+            Text(
+                text = "${page.pubDate}",
+                color = Color.Gray,
+                fontWeight = FontWeight.Bold,
+                fontSize = 8.sp
+            )
+        }
+    }
+}
+
+
+@Composable
+fun PageFirstItem(page: Page, navController: NavController) {
+    var imageUrl by remember { mutableStateOf(page.imageURL) }
+
+
+    val context = LocalContext.current
+    Row(
+        modifier = Modifier
+            .background(Color.White)
+            .fillMaxWidth()
+            .border(0.02.dp, color = Color.Black)
+            .padding(24.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+
+        ) {
+        // IMG
+        GlideImage(
+            imageModel = imageUrl,
+            contentScale = ContentScale.Fit,
+            circularReveal = CircularReveal(250),
+            modifier = Modifier.size(150.dp),
             placeHolder = Icons.Filled.Image,
             error = Icons.Filled.Error
         )
@@ -84,6 +152,7 @@ fun PageItem(page: Page, navController: NavController) {
 
     }
 }
+
 
 @Composable
 fun ShowListOfPages(navController: NavController, model: NewsListViewModel) {
@@ -124,8 +193,14 @@ fun ShowListOfPages(navController: NavController, model: NewsListViewModel) {
                     )
                 }, content = {
                     LazyColumn {
+                        var check = true
                         items(items = page) { page ->
-                            PageItem(page = page, navController)
+                            if(check){
+                                PageFirstItem(page = page, navController)
+                                check = false
+                            }else{
+                                PageItem(page = page, navController)
+                            }
                         }
                     }
                 }
