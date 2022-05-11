@@ -49,6 +49,7 @@ fun SinglePageScreen(page: Page) {
                 // IMG
                 GlideImage(
                     imageModel = "https://media-mbst-pub-ue1.s3.amazonaws.com/creatr-uploaded-images/2020-09/1fa32ec0-f76f-11ea-9d69-07d789e1644d",
+                   // imageModel = page.imageURL,
                     contentScale = ContentScale.Fit,
                     circularReveal = CircularReveal(250),
                     modifier = Modifier.size(500.dp),

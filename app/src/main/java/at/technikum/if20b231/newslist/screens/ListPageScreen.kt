@@ -108,6 +108,7 @@ fun PageFirstItem(page: Page, navController: NavController) {
     val context = LocalContext.current
     Row(
         modifier = Modifier
+            .fillMaxWidth()
             .background(Color.White)
             .fillMaxWidth()
             .border(0.02.dp, color = Color.Black)
@@ -192,15 +193,18 @@ fun ShowListOfPages(navController: NavController, model: NewsListViewModel) {
 
                     )
                 }, content = {
-                    LazyColumn {
+                    LazyColumn() {
                         var check = true
                         items(items = page) { page ->
+
                             if(check){
                                 PageFirstItem(page = page, navController)
                                 check = false
                             }else{
                                 PageItem(page = page, navController)
                             }
+
+
                         }
                     }
                 }
