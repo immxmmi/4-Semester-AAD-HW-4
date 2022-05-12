@@ -20,8 +20,17 @@ class NewsListViewModel : ViewModel() {
 
     val imageShow : MutableLiveData<Boolean> = MutableLiveData(true)
     val imageDownload : MutableLiveData<Boolean> = MutableLiveData(true)
-    val url = "https://www.engadget.com/rss.xml"
+    val url = MutableLiveData<String>("https://www.engadget.com/rss.xml")
+   // val url = "https://www.engadget.com/rss.xml"
 
+
+    fun updateImageShow(show: Boolean){
+        imageShow.value = show;
+    }
+
+    fun updateUrl(newUrl: String){
+        url.value = newUrl
+    }
 
     private val pages : MutableLiveData<List<Page>> by lazy {
         MutableLiveData<List<Page>>().also {
@@ -55,7 +64,7 @@ class NewsListViewModel : ViewModel() {
 
     //LOAD RESULT
     private suspend fun loadWebResult(): List<Page>  {
-        return withContext(Dispatchers.IO) { loadXmlFromNetwork(url) }
+        return withContext(Dispatchers.IO) { loadXmlFromNetwork(url.value.toString()) }
     }
 
     //Update Settings

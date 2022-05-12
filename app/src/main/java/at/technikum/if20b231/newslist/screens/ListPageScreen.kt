@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Error
@@ -45,23 +46,31 @@ fun PageItem(page: Page, navController: NavController) {
             .border(0.02.dp, color = Color.Black)
             .padding(24.dp)
             .clickable(enabled = true) {
-        if (page == null) {
-            Toast.makeText(context, "No Details", Toast.LENGTH_SHORT).show()
-        } else {
+                if (page == null) {
+                    Toast
+                        .makeText(context, "No Details", Toast.LENGTH_SHORT)
+                        .show()
+                } else {
 
-            navController.navigate(
-                route = Screen.PageDetail.withArgs(
-                    page.id.orEmpty(),
-                    page.title.orEmpty(),
-                    page.author.orEmpty(),
-                    page.descriptor.orEmpty().replace("/", "\\"),
-                    page.pubDate.toString(),
-                    page.imageURL.orEmpty().replace("/", "\\"),
-                    page.articleURL.toString().replace("/", "\\")
-                )
-            )
-        }
-    },
+                    navController.navigate(
+                        route = Screen.PageDetail.withArgs(
+                            page.id.orEmpty(),
+                            page.title.orEmpty(),
+                            page.author.orEmpty(),
+                            page.descriptor
+                                .orEmpty()
+                                .replace("/", "\\"),
+                            page.pubDate.toString(),
+                            page.imageURL
+                                .orEmpty()
+                                .replace("/", "\\"),
+                            page.articleURL
+                                .toString()
+                                .replace("/", "\\")
+                        )
+                    )
+                }
+            },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
 
@@ -77,12 +86,12 @@ fun PageItem(page: Page, navController: NavController) {
         )
         Column() {
 
-        Text(
-            text = "${page.title}",
-            color = Color.DarkGray,
-            fontWeight = FontWeight.Bold,
-            fontSize = 16.sp
-        )
+            Text(
+                text = "${page.title}",
+                color = Color.DarkGray,
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp
+            )
             Text(
                 text = "${page.author}",
                 color = Color.Gray,
@@ -99,37 +108,20 @@ fun PageItem(page: Page, navController: NavController) {
     }
 }
 
-
 @Composable
-fun PageFirstItem(page: Page, navController: NavController) {
-    var imageUrl by remember { mutableStateOf(page.imageURL) }
-
-
+fun PageItemNoImg(page: Page, navController: NavController) {
     val context = LocalContext.current
     Row(
         modifier = Modifier
-            .fillMaxWidth()
             .background(Color.White)
             .fillMaxWidth()
             .border(0.02.dp, color = Color.Black)
-            .padding(24.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-
-        ) {
-        // IMG
-        GlideImage(
-            imageModel = imageUrl,
-            contentScale = ContentScale.Fit,
-            circularReveal = CircularReveal(250),
-            modifier = Modifier.size(150.dp),
-            placeHolder = Icons.Filled.Image,
-            error = Icons.Filled.Error
-        )
-        Text(
-            modifier = Modifier.clickable(enabled = true) {
+            .padding(24.dp)
+            .clickable(enabled = true) {
                 if (page == null) {
-                    Toast.makeText(context, "No Details", Toast.LENGTH_SHORT).show()
+                    Toast
+                        .makeText(context, "No Details", Toast.LENGTH_SHORT)
+                        .show()
                 } else {
 
                     navController.navigate(
@@ -137,29 +129,147 @@ fun PageFirstItem(page: Page, navController: NavController) {
                             page.id.orEmpty(),
                             page.title.orEmpty(),
                             page.author.orEmpty(),
-                            page.descriptor.orEmpty().replace("/", "\\"),
+                            page.descriptor
+                                .orEmpty()
+                                .replace("/", "\\"),
                             page.pubDate.toString(),
-                            page.imageURL.orEmpty().replace("/", "\\"),
-                            page.articleURL.toString().replace("/", "\\")
+                            page.imageURL
+                                .orEmpty()
+                                .replace("/", "\\"),
+                            page.articleURL
+                                .toString()
+                                .replace("/", "\\")
                         )
                     )
                 }
             },
-            text = "${page.title}",
-            color = Color.Black,
-            fontWeight = FontWeight.Bold,
-            fontSize = 12.sp
-        )
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
 
+        ) {
+
+        Column() {
+
+            Text(
+                text = "${page.title}",
+                color = Color.DarkGray,
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp
+            )
+            Text(
+                text = "${page.author}",
+                color = Color.Gray,
+                fontWeight = FontWeight.Bold,
+                fontSize = 8.sp
+            )
+            Text(
+                text = "${page.pubDate}",
+                color = Color.Gray,
+                fontWeight = FontWeight.Bold,
+                fontSize = 8.sp
+            )
+        }
     }
 }
 
+@Composable
+fun PageFirstItem(page: Page, navController: NavController) {
+    var imageUrl by remember { mutableStateOf(page.imageURL) }
+
+
+    val context = LocalContext.current
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier
+                .clickable(enabled = true) {
+                    if (page == null) {
+                        Toast
+                            .makeText(context, "No Details", Toast.LENGTH_SHORT)
+                            .show()
+                    } else {
+
+                        navController.navigate(
+                            route = Screen.PageDetail.withArgs(
+                                page.id.orEmpty(),
+                                page.title.orEmpty(),
+                                page.author.orEmpty(),
+                                page.descriptor
+                                    .orEmpty()
+                                    .replace("/", "\\"),
+                                page.pubDate.toString(),
+                                page.imageURL
+                                    .orEmpty()
+                                    .replace("/", "\\"),
+                                page.articleURL
+                                    .toString()
+                                    .replace("/", "\\")
+                            )
+                        )
+                    }
+                }
+                .fillMaxWidth()
+                .background(Color.White)
+                .border(0.02.dp, color = Color.Black)
+                .padding(24.dp),
+           // verticalAlignment = Alignment.CenterVertically,
+           // horizontalArrangement = Arrangement.spacedBy(12.dp),
+//
+
+            ) {
+            Box(
+                contentAlignment = Alignment.BottomCenter
+            ) {
+                // IMG
+                GlideImage(
+                    imageModel = imageUrl,
+                    contentScale = ContentScale.Fit,
+                    circularReveal = CircularReveal(250),
+                    modifier = Modifier.fillMaxSize(),
+                    placeHolder = Icons.Filled.Image,
+                    error = Icons.Filled.Error
+                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.White.copy(alpha = 0.5f))
+                        .padding(10.dp)
+                    ,
+                    Alignment.BottomCenter
+                ) {
+                    Column() {
+
+                        Text(
+                            text = "${page.title}",
+                            color = Color.Black,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 12.sp
+                        )
+                        Text(
+                            text = "${page.author}",
+                            color = Color.Black,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 8.sp
+                        )
+                        Text(
+                            text = "${page.pubDate}",
+                            color = Color.Black,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 8.sp
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
 
 @Composable
 fun ShowListOfPages(navController: NavController, model: NewsListViewModel) {
 
-    val data by model.load.observeAsState()
-    var page = data ?: emptyList()
+    val pages by model.load.observeAsState()
+    val imageShow by model.imageShow.observeAsState();
     val context = LocalContext.current
     var expanded by remember { mutableStateOf(false) }
     NewsListTheme {
@@ -194,17 +304,16 @@ fun ShowListOfPages(navController: NavController, model: NewsListViewModel) {
                     )
                 }, content = {
                     LazyColumn() {
-                        var check = true
-                        items(items = page) { page ->
-
-                            if(check){
-                                PageFirstItem(page = page, navController)
-                                check = false
-                            }else{
-                                PageItem(page = page, navController)
+                        itemsIndexed(pages ?: listOf()) { index, page ->
+                            if (imageShow == false) {
+                                PageItemNoImg(page = page, navController)
+                            } else {
+                                if (index == 0) {
+                                    PageFirstItem(page = page, navController)
+                                } else {
+                                    PageItem(page = page, navController)
+                                }
                             }
-
-
                         }
                     }
                 }

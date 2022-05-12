@@ -1,10 +1,11 @@
 package at.technikum.if20b231.newslist.screens
 
+import android.content.Intent
+import android.net.Uri
+import android.widget.TextView
 import android.widget.Toast
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -13,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -21,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.text.HtmlCompat
 import androidx.navigation.NavController
 import at.technikum.if20b231.newslist.R
 import at.technikum.if20b231.newslist.handler.HtmlText
@@ -31,7 +34,8 @@ import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
 fun SinglePageScreen(page: Page) {
-    var imageUrl by remember { mutableStateOf(page.imageURL) }
+    page.imageURL = page.imageURL.toString().replace("\\","/")
+    //var imageUrl by remember { mutableStateOf(page.imageURL) }
     val context = LocalContext.current
     Column(
         modifier = Modifier
@@ -40,16 +44,115 @@ fun SinglePageScreen(page: Page) {
         TopAppBar(title = { Text(stringResource(R.string.pageTitle)) })
 
        // Scaffold(topBar = {
+
+/*
+        Column(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Row(
+                modifier = Modifier
+                    .clickable(enabled = true) {
+                        if (page == null) {
+                            Toast
+                                .makeText(context, "No Details", Toast.LENGTH_SHORT)
+                                .show()
+                        } else {
+
+                            navController.navigate(
+                                route = Screen.PageDetail.withArgs(
+                                    page.id.orEmpty(),
+                                    page.title.orEmpty(),
+                                    page.author.orEmpty(),
+                                    page.descriptor
+                                        .orEmpty()
+                                        .replace("/", "\\"),
+                                    page.pubDate.toString(),
+                                    page.imageURL
+                                        .orEmpty()
+                                        .replace("/", "\\"),
+                                    page.articleURL
+                                        .toString()
+                                        .replace("/", "\\")
+                                )
+                            )
+                        }
+                    }
+                    .fillMaxWidth()
+                    .background(Color.White)
+                    .border(0.02.dp, color = Color.Black)
+                    .padding(24.dp),
+                // verticalAlignment = Alignment.CenterVertically,
+                // horizontalArrangement = Arrangement.spacedBy(12.dp),
+//
+
+            ) {
+                Box(
+                    contentAlignment = Alignment.BottomCenter
+                ) {
+                    // IMG
+                    GlideImage(
+                        imageModel = imageUrl,
+                        contentScale = ContentScale.Fit,
+                        circularReveal = CircularReveal(250),
+                        modifier = Modifier.fillMaxSize(),
+                        placeHolder = Icons.Filled.Image,
+                        error = Icons.Filled.Error
+                    )
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(Color.White.copy(alpha = 0.5f))
+                            .padding(10.dp)
+                        ,
+                        Alignment.BottomCenter
+                    ) {
+                        Column() {
+
+                            Text(
+                                text = "${page.title}",
+                                color = Color.Black,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 12.sp
+                            )
+                            Text(
+                                text = "${page.author}",
+                                color = Color.Black,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 8.sp
+                            )
+                            Text(
+                                text = "${page.pubDate}",
+                                color = Color.Black,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 8.sp
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
             Column(
                 modifier = Modifier
                     .background(Color.White)
                     .fillMaxSize(),
             ) {
                 // IMG
-                // IMG
                 GlideImage(
-                    imageModel = "https://media-mbst-pub-ue1.s3.amazonaws.com/creatr-uploaded-images/2020-09/1fa32ec0-f76f-11ea-9d69-07d789e1644d",
-                   // imageModel = page.imageURL,
+                    imageModel = page.imageURL,
                     contentScale = ContentScale.Fit,
                     circularReveal = CircularReveal(250),
                     modifier = Modifier.size(500.dp),
@@ -88,7 +191,7 @@ fun SinglePageScreen(page: Page) {
                     }
                 }
             }
-      //  }, content = {
+
 
             // HTML
             page.descriptor?.let {
@@ -100,12 +203,10 @@ fun SinglePageScreen(page: Page) {
                 modifier = Modifier
                     .fillMaxWidth(),
                 onClick = {
-                    Toast.makeText(context, "No Details", Toast.LENGTH_SHORT).show()
+                    context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(page.articleURL?: "")))
                 }) {
                 Text(text = "Full Story")
             }
-     //   }
-     //   )
     }
 }
 

@@ -24,14 +24,15 @@ fun SettingsScreen(navController: NavController, model: NewsListViewModel) {
 
     val currentImageShow by model.imageShow.observeAsState()
     val currentImageDownload by model.imageDownload.observeAsState()
-    val url = remember { mutableStateOf(model.url) }
+    val currentURL by model.url.observeAsState()
+    var url by remember { mutableStateOf(currentURL) }
     val imageShow = remember { mutableStateOf(currentImageShow) }
     val imageDownload = remember { mutableStateOf(currentImageDownload) }
 
     BackHandler {
-        //  model.updateText(newText ?: "")
-
+        model.updateImageShow(imageShow.value ?: true)
         navController.navigateUp()
+        model.updateUrl(url ?: "")
     }
 
     Column(
@@ -40,8 +41,6 @@ fun SettingsScreen(navController: NavController, model: NewsListViewModel) {
     ) {
         TopAppBar(
             title = { Text(stringResource(R.string.setings_menu_title)) })
-
-
 
         Row(
             modifier = Modifier
@@ -59,10 +58,17 @@ fun SettingsScreen(navController: NavController, model: NewsListViewModel) {
                     fontSize = 18.sp,
                     text = "News Feed URL "
                 )
-                Text(
-                    fontSize = 12.sp,
-                    color = Color.Gray,
-                    text = url.value.toString()
+                TextField(
+                    value = url ?: "",
+                    onValueChange = {
+                        url = it
+                    },
+                    label = { Text(text = currentURL.toString())}
+
+
+                   //fontSize = 12.sp,
+                   //color = Color.Gray,
+                   //text = url.value.toString()
                 )
             }
         }
