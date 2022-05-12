@@ -34,7 +34,7 @@ import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
 fun SinglePageScreen(page: Page) {
-    page.imageURL = page.imageURL.toString().replace("\\","/")
+    page.imageURL = page.imageURL.toString().replace("\\", "/")
     //var imageUrl by remember { mutableStateOf(page.imageURL) }
     val context = LocalContext.current
     Column(
@@ -43,171 +43,86 @@ fun SinglePageScreen(page: Page) {
     ) {
         TopAppBar(title = { Text(stringResource(R.string.pageTitle)) })
 
-       // Scaffold(topBar = {
 
-/*
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .background(Color.White)
+                .fillMaxSize(),
         ) {
-            Row(
-                modifier = Modifier
-                    .clickable(enabled = true) {
-                        if (page == null) {
-                            Toast
-                                .makeText(context, "No Details", Toast.LENGTH_SHORT)
-                                .show()
-                        } else {
-
-                            navController.navigate(
-                                route = Screen.PageDetail.withArgs(
-                                    page.id.orEmpty(),
-                                    page.title.orEmpty(),
-                                    page.author.orEmpty(),
-                                    page.descriptor
-                                        .orEmpty()
-                                        .replace("/", "\\"),
-                                    page.pubDate.toString(),
-                                    page.imageURL
-                                        .orEmpty()
-                                        .replace("/", "\\"),
-                                    page.articleURL
-                                        .toString()
-                                        .replace("/", "\\")
-                                )
-                            )
-                        }
-                    }
-                    .fillMaxWidth()
-                    .background(Color.White)
-                    .border(0.02.dp, color = Color.Black)
-                    .padding(24.dp),
-                // verticalAlignment = Alignment.CenterVertically,
-                // horizontalArrangement = Arrangement.spacedBy(12.dp),
-//
-
-            ) {
-                Box(
-                    contentAlignment = Alignment.BottomCenter
-                ) {
-                    // IMG
-                    GlideImage(
-                        imageModel = imageUrl,
-                        contentScale = ContentScale.Fit,
-                        circularReveal = CircularReveal(250),
-                        modifier = Modifier.fillMaxSize(),
-                        placeHolder = Icons.Filled.Image,
-                        error = Icons.Filled.Error
-                    )
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(Color.White.copy(alpha = 0.5f))
-                            .padding(10.dp)
-                        ,
-                        Alignment.BottomCenter
-                    ) {
-                        Column() {
-
-                            Text(
-                                text = "${page.title}",
-                                color = Color.Black,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 12.sp
-                            )
-                            Text(
-                                text = "${page.author}",
-                                color = Color.Black,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 8.sp
-                            )
-                            Text(
-                                text = "${page.pubDate}",
-                                color = Color.Black,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 8.sp
-                            )
-                        }
-                    }
-                }
-            }
-        }
-
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-            Column(
-                modifier = Modifier
-                    .background(Color.White)
-                    .fillMaxSize(),
+            Box(
+                contentAlignment = Alignment.BottomCenter
             ) {
                 // IMG
                 GlideImage(
                     imageModel = page.imageURL,
                     contentScale = ContentScale.Fit,
                     circularReveal = CircularReveal(250),
-                    modifier = Modifier.size(500.dp),
+                    modifier = Modifier.fillMaxSize(),
                     placeHolder = Icons.Filled.Image,
                     error = Icons.Filled.Error
                 )
-                // Box
-                Column(
-                    Modifier.padding(0.dp, 0.dp, 0.dp, 0.dp)
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.White.copy(alpha = 0.8f))
+                        .padding(10.dp),
+                    Alignment.BottomCenter
                 ) {
-                    page.title?.let {
-                        Text(
-                            text = "$it",
-                            color = Color.DarkGray,
-                            fontSize = 30.sp,
-                            fontWeight = FontWeight.Normal
-                        )
-                    }
+                    Column() {
 
-                    page.author?.let {
                         Text(
-                            text = "$it",
-                            color = Color.Gray,
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Normal
+                            text = "${page.title}",
+                            color = Color.Black,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 12.sp
                         )
-                    }
-
-                    page.pubDate?.let {
                         Text(
-                            text = "$it",
-                            color = Color.Gray,
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Normal
+                            text = "${page.author}",
+                            color = Color.Black,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 8.sp
+                        )
+                        Text(
+                            text = "${page.pubDate}",
+                            color = Color.Black,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 8.sp
                         )
                     }
                 }
             }
 
 
-            // HTML
-            page.descriptor?.let {
-                HtmlText(text = "$it")
-            }
+            // Box
+            Column(
+                Modifier.padding(0.dp, 0.dp, 0.dp, 0.dp)
+            ) {
 
-            //Full Story
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                onClick = {
-                    context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(page.articleURL?: "")))
-                }) {
-                Text(text = "Full Story")
+
+                // HTML
+                page.descriptor?.let {
+                    HtmlText(text = "$it")
+                }
+
+                //Full Story
+                Button(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    onClick = {
+                        context.startActivity(
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse(page.articleURL ?: "")
+                            )
+                        )
+                    }) {
+                    Text(text = "Full Story")
+                }
+
             }
+        }
     }
+
 }
 
 @Composable

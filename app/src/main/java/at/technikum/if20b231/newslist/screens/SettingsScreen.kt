@@ -31,8 +31,9 @@ fun SettingsScreen(navController: NavController, model: NewsListViewModel) {
 
     BackHandler {
         model.updateImageShow(imageShow.value ?: true)
-        navController.navigateUp()
         model.updateUrl(url ?: "")
+       // model.reload()
+        navController.navigateUp()
     }
 
     Column(

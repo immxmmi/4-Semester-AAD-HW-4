@@ -64,7 +64,9 @@ class NewsListViewModel : ViewModel() {
 
     //LOAD RESULT
     private suspend fun loadWebResult(): List<Page>  {
-        return withContext(Dispatchers.IO) { loadXmlFromNetwork(url.value.toString()) }
+        return withContext(Dispatchers.IO) {
+            loadXmlFromNetwork(url.value.toString())
+        }
     }
 
     //Update Settings
