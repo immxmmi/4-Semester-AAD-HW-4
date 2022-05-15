@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import at.technikum.if20b231.newslist.handler.NewsDownloader
 import at.technikum.if20b231.newslist.handler.XMLParser
 import at.technikum.if20b231.newslist.modle.Page
 import kotlinx.coroutines.Dispatchers
@@ -45,7 +46,7 @@ class NewsListViewModel : ViewModel() {
     // LOAD
     private fun loadPages(liveData: MutableLiveData<List<Page>>) {
         viewModelScope.launch {
-            liveData.value =  orderListByDate(loadWebResult())
+            liveData.value = loadWebResult()?.let { orderListByDate(it) }
         }
     }
 
@@ -63,14 +64,9 @@ class NewsListViewModel : ViewModel() {
     }
 
     //LOAD RESULT
-    private suspend fun loadWebResult(): List<Page>  {
-        return withContext(Dispatchers.IO) {
-            loadXmlFromNetwork(url.value.toString())
-        }
+    private suspend fun loadWebResult(): List<Page>? {
+         return   loadXmlFromNetwork(url.value.toString())
     }
-
-    //Update Settings
-
 
     //RELOAD RESULT
      fun reload(){
@@ -79,33 +75,8 @@ class NewsListViewModel : ViewModel() {
 
 }
 
-
-
-
-
-
-
-
 @Throws(XmlPullParserException::class, IOException::class)
-private fun loadXmlFromNetwork(urlString: String): List<Page> {
-    val currentPages: List<Page> = downloadUrl(urlString)?.use { stream ->
-        XMLParser().parse(stream)
-    } ?: emptyList()
-
-    return currentPages
+private suspend fun loadXmlFromNetwork(urlString: String): List<Page>? {
+    return NewsDownloader().load(urlString)
 }
-@Throws(IOException::class)
-private fun downloadUrl(urlString: String): InputStream? {
-    val url = URL(urlString)
-    return (url.openConnection() as? HttpURLConnection)?.run {
-        readTimeout = 10000
-        connectTimeout = 15000
-        requestMethod = "GET"
-        doInput = true
-        // Starts the query
-        connect()
-        inputStream
-    }
-}
-
 
